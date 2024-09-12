@@ -6,18 +6,18 @@ const LoginPage = () => {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
+  const baseurl = import.meta.env.REACT_APP_BASE_URL || "http://localhost:1000";
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log(userId,password);
+    console.log(userId, password);
     try {
-      const response = await axios.post("http://localhost:1000/quiz/login", {
+      const response = await axios.post(`${baseurl}/quiz/login`, {
         userId,
         password,
       });
 
       console.log("Login successful", response.data);
-      localStorage.setItem("token", response.data.token); 
+      localStorage.setItem("token", response.data.token);
     } catch (err) {
       setError("Invalid credentials");
     }
@@ -27,20 +27,33 @@ const LoginPage = () => {
     <div className="flex items-center justify-center h-screen bg-background ">
       <Container component="main" maxWidth="md" className="py-8">
         <Paper elevation={9} className="p-8">
-
           {/* Box for Image and Form */}
           <div className="flex items-center justify-between space-x-8">
             {/* Image Section */}
             <div className="w-1/2">
-              <img src="/Images/Quiz_Login.jpeg" alt="Quiz Login" width={500} height={500} />
+              <img
+                src="/Images/Quiz_Login.jpeg"
+                alt="Quiz Login"
+                width={500}
+                height={500}
+              />
             </div>
 
             {/* Login Form Section */}
             <div className="w-1/2">
-              <Typography variant="h5" component="h1" gutterBottom align="center">
+              <Typography
+                variant="h5"
+                component="h1"
+                gutterBottom
+                align="center"
+              >
                 Login
               </Typography>
-              {error && <Typography color="error" align="center">{error}</Typography>}
+              {error && (
+                <Typography color="error" align="center">
+                  {error}
+                </Typography>
+              )}
               <form noValidate onSubmit={handleLogin}>
                 <TextField
                   variant="outlined"
@@ -79,7 +92,6 @@ const LoginPage = () => {
               </form>
             </div>
           </div>
-
         </Paper>
       </Container>
     </div>
