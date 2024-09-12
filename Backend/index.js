@@ -2,6 +2,7 @@ const express = require("express");
 const connection = require("./connection/database");
 const port = 1000 || process.env.PORT;
 const app = express();
+const cors = require("cors");
 const loginRoute = require("./routes/login.route");
 // const quizRoute = require("./routes/quiz.route");
 // const userRoute = require("./routes/user.route");
@@ -9,6 +10,8 @@ const loginRoute = require("./routes/login.route");
 // const resultRoute = require("./routes/result.route");
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
+app.use(cors());
+
 app.use("/quiz", loginRoute);
 
 app.get("/", (req, res) => {

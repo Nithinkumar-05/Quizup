@@ -45,11 +45,11 @@ const Navbar = () => {
   }, []);
 
   return (
-    <MTNavbar className="mx-auto max-w-screen-xl px-4 py-2">
+    <MTNavbar className="mx-auto max-w-screen-xl px-4 py-2 m-2 shadow-md">
       <div className="flex items-center justify-between text-black-900">
         <Typography
           as="a"
-          href="#"
+          href="/"
           variant="h6"
           className="mr-4 cursor-pointer py-1.5 lg:ml-2 text-3xl"
           color="gray"
@@ -68,7 +68,10 @@ const Navbar = () => {
           >
             Log In
           </Button>
-          <Button variant="gradient" size="sm">
+          <Button 
+            variant="gradient" 
+            size="sm"
+            onClick={()=>navigate("/SignUp")}>
             Sign Up
           </Button>
         </div>
