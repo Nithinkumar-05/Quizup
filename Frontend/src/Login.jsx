@@ -32,7 +32,7 @@ const LoginPage = () => {
             {/* Image Section */}
             <div className="w-1/2">
               <img
-                src="/Images/Quiz_Login.jpeg"
+                src="/Images/Quizimg2.png"
                 alt="Quiz Login"
                 width={500}
                 height={500}

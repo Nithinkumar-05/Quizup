@@ -38,6 +38,8 @@ const SignUpPage = () => {
         window.location.reload();
       }
     } catch (err) {
+      console.error(err); // Log the error for debugging
+      setError("Sign-up failed. Please try again.");
       setError("Sign-up failed. Please try again.");
     }
   };
@@ -50,7 +52,7 @@ const SignUpPage = () => {
             {/* Image Section */}
             <div className="flex items-center justify-center md:display-none">
               <img
-                src="/Images/Quiz_Login.jpeg"
+                src="/Images/Quizlogo3.jpg"
                 alt="Sign Up"
                 className="object-cover w-full h-full rounded-lg shadow-md"
               />
