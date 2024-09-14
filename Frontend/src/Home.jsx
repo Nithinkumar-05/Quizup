@@ -1,6 +1,6 @@
 // import React from 'react';
 import LinkJoin from "./Linkjoin";
-
+import {Link} from "react-router-dom";
 const HeroSection = () => {
   return (
     <section className="bg-white dark:bg-gray-900">
@@ -13,8 +13,8 @@ const HeroSection = () => {
             Make a quiz with different question types to engage students in a
             classroom, train, or play trivia with friends
           </p>
-          <a
-            href="/Login"
+          <Link
+            to="/Login"
             className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
           >
             Get started
@@ -30,7 +30,7 @@ const HeroSection = () => {
                 clipRule="evenodd"
               ></path>
             </svg>
-          </a>
+          </Link>
 
           {/* Replaced the "Speak to Sales" button with LinkJoin component */}
           <LinkJoin />
@@ -66,6 +66,8 @@ const HeroSection = () => {
                     <p>
                       Quickly <b>create great looking tests</b> using multiple
                       question types and formatting options.
+                      <br/>
+                      <br/>
                     </p>
                   </div>
                 </div>
@@ -90,6 +92,7 @@ const HeroSection = () => {
                         published privately to a select group or open them up
                       </b>{" "}
                       to everyone with a single link and registration page.
+                      <br />
                     </p>
                   </div>
                 </div>
@@ -110,7 +113,7 @@ const HeroSection = () => {
                     <h2 className="text-xl font-semibold mb-2">Analyze</h2>
                     <p>
                       EdQuiz instantly marks and grades your tests. Powerful
-                      reports then allow you to <b>perform in-depth analysis</b>{" "}
+                      reports then allow you to <b>perform in-depth analysis </b>
                       across all responses.
                     </p>
                   </div>

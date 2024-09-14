@@ -1,20 +1,39 @@
 import { Container, TextField, Button, Typography, Paper } from "@mui/material";
 import { useState } from "react";
-import axios from "axios"; // For making API calls
-
+import {useAuth} from "./Routes/AuthContext";
+import { useNavigate } from "react-router-dom";
 const LoginPage = () => {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const baseurl = import.meta.env.REACT_APP_BASE_URL || "http://localhost:1000";
+  const auth = useAuth();
+  const navigate = useNavigate();
   const handleLogin = async (e) => {
+
     e.preventDefault();
     console.log(userId, password);
     try {
-      const response = await axios.post(`${baseurl}/quiz/login`, {
-        userId,
-        password,
-      });
+        await auth.login({userId,password});
+        const role = localStorage.getItem("role");
+        console.log("logged in role: ",role);
+
+        if(role){
+            switch(role){
+                case "admin":
+                  navigate("/AdminDashboard");
+                  break;
+                case "student":
+                  navigate("/StudentDashboard");
+                  break;
+                case "teacher":
+                  navigate("/TeacherDashboard");
+                  break;
+                default:
+                  navigate("/");
+                  
+            }
+        }
 
       console.log("Login successful", response.data);
       localStorage.setItem("token", response.data.token);
