@@ -81,18 +81,22 @@ const handleClick = ()=>{
         <div className="hidden gap-2 lg:flex ml-auto">
         {!token ?
             <>
-              <Button
-              variant="outlined"
-              size="sm"
-              color="gray"
-              fullWidth
-              onClick={() => navigate("/Login")}
-              >
-              Log In
-              </Button>
-              <Button variant="gradient" size="sm" fullWidth>
-                Sign Up
-              </Button>
+              <div className="hidden gap-2 lg:flex ml-auto">
+          <Button
+            variant="text"
+            size="sm"
+            color="gray"
+            onClick={() => navigate("/Login")}
+          >
+            Log In
+          </Button>
+          <Button 
+            variant="gradient" 
+            size="sm"
+            onClick={()=>navigate("/SignUp")}>
+            Sign Up
+          </Button>
+        </div>
           </>
           : 
           <Button variant="gradient" size="sm" color="gray" fullWidth onClick={() =>handleClick()}>Dashboard</Button>
