@@ -8,7 +8,7 @@ connection
     console.log("connection with Quiz database is successful");
   })
   .catch((err) => {
-    console.log("connection with Quiz database is un-successful");
+    console.log("connection with Quiz database is un-successful",err);
   });
 
 module.exports = connection;

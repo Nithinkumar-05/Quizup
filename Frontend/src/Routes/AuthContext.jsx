@@ -1,4 +1,4 @@
-import { useContext, createContext, useState } from "react";
+import { useContext, createContext, useState, useEffect } from "react";
 import axios from "axios";
 
 const baseurl = import.meta.env.REACT_APP_BASE_URL || "http://localhost:1000";
@@ -23,12 +23,12 @@ const AuthProvider = ({ children }) => {
       setToken(token);
       setRole(role);
       setUserId(user.userId);
-      setName(user.name);
-
+      setName(user.fullName);
+      console.log(role,userId,name);
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
-      localStorage.setItem("userId", user.userId); // Store userId from response
-      localStorage.setItem("name", user.name); // Store name from response
+      localStorage.setItem("userId", user.userId); 
+      localStorage.setItem("name", user.fullName); 
     } catch (err) {
       console.log("Error during logging the session");
       console.log(err);

@@ -16,7 +16,7 @@ function NavList() {
     <List className="ml-auto mt-4 mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
       <Typography
         as="a"
-        href="#"
+        href="/"
         variant="small"
         color="gray"
         className="font-medium"
@@ -33,6 +33,7 @@ function NavList() {
 const Navbar = () => {
   const [openNav, setOpenNav] = React.useState(false);
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
   React.useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 960) {
@@ -43,7 +44,25 @@ const Navbar = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
+const handleClick = ()=>{
+  const role = localStorage.getItem("role");
+  if(role){
+    switch(role){
+        case "admin":
+          navigate("/AdminDashboard");
+          break;
+        case "student":
+          navigate("/StudentDashboard");
+          break;
+        case "teacher":
+          navigate("/TeacherDashboard");
+          break;
+        default:
+          navigate("/");
+          
+    }
+  }
+}
   return (
     <MTNavbar className="mx-auto max-w-screen-xl px-4 py-2 m-2 shadow-md">
       <div className="flex items-center justify-between text-black-900">
@@ -60,20 +79,24 @@ const Navbar = () => {
           <NavList />
         </div>
         <div className="hidden gap-2 lg:flex ml-auto">
-          <Button
-            variant="text"
-            size="sm"
-            color="gray"
-            onClick={() => navigate("/Login")}
-          >
-            Log In
-          </Button>
-          <Button 
-            variant="gradient" 
-            size="sm"
-            onClick={()=>navigate("/SignUp")}>
-            Sign Up
-          </Button>
+        {!token ?
+            <>
+              <Button
+              variant="outlined"
+              size="sm"
+              color="gray"
+              fullWidth
+              onClick={() => navigate("/Login")}
+              >
+              Log In
+              </Button>
+              <Button variant="gradient" size="sm" fullWidth>
+                Sign Up
+              </Button>
+          </>
+          : 
+          <Button variant="gradient" size="sm" color="gray" fullWidth onClick={() =>handleClick()}>Dashboard</Button>
+        }
         </div>
         <IconButton
           variant="text"
@@ -91,18 +114,24 @@ const Navbar = () => {
       <Collapse open={openNav}>
         <NavList />
         <div className="flex w-full flex-nowrap items-center gap-2 lg:hidden">
-          <Button
-            variant="outlined"
-            size="sm"
-            color="gray"
-            fullWidth
-            onClick={() => navigate("/Login")}
-          >
-            Log In
-          </Button>
-          <Button variant="gradient" size="sm" fullWidth>
-            Sign Up
-          </Button>
+          {!token ?
+            <>
+              <Button
+              variant="outlined"
+              size="sm"
+              color="gray"
+              fullWidth
+              onClick={() => navigate("/Login")}
+              >
+              Log In
+              </Button>
+              <Button variant="gradient" size="sm" fullWidth>
+                Sign Up
+              </Button>
+          </>
+          : 
+          <Button variant="gradient" size="sm" color="gray" fullWidth onClick={() =>handleClick()}>Dashboard</Button>
+        }
         </div>
       </Collapse>
     </MTNavbar>
