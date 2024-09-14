@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const mongoose = require("mongoose");
 const connection = mongoose.connect(
-  "mongodb+srv://cvrquiz:cvrquiz@cluster0.50h1fry.mongodb.net/quiz"
+  process.env.MONGO_URI
 );
 connection
   .then(() => {
