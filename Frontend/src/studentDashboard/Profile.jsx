@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../Routes/AuthContext";
-import axios from "axios"; // Import axios for updating profile (if needed)
+import axios from "axios"; 
 
 const Profile = () => {
     const name = localStorage.getItem("name");
