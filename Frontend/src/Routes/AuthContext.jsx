@@ -29,6 +29,7 @@ const AuthProvider = ({ children }) => {
       localStorage.setItem("role", role);
       localStorage.setItem("userId", user.userId); 
       localStorage.setItem("name", user.fullName); 
+      localStorage.setItem("index",1);
     } catch (err) {
       console.log("Error during logging the session");
       console.log(err);
@@ -47,6 +48,7 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem("role");
     localStorage.removeItem("userId");
     localStorage.removeItem("name");
+    localStorage.removeItem("index");
   };
 
   return (

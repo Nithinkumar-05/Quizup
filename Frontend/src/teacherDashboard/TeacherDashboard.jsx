@@ -3,11 +3,11 @@ import { useAuth } from "../Routes/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Profile from "./Profile";
 import Quiz from "./Quiz";
-import CreateQuiz from "./CreateQuiz";
-
+import CreateQuiz from "./createQuiz";
+import Preview from "./Preview";
 const TeacherDashboard = () => {
     const [userId, setUserId] = useState(localStorage.getItem("userId"));
-    const [index, setIndex] = useState(1);
+    const [index, setIndex] = useState(localStorage.getItem("index"));
     const auth = useAuth();
     const navigate = useNavigate();
 
@@ -15,8 +15,12 @@ const TeacherDashboard = () => {
         auth.logout();
         navigate("/");
     };
+    const handlePage = (idx)=>{
+        setIndex(idx);
+        localStorage.setItem("index",idx);
+    }
 
-    const components = [<Profile/>, <CreateQuiz/>, <Quiz/>];
+    const components = [<Profile/>, <CreateQuiz/>, <Quiz/>,<Preview/>];
 
     return (
         <div className="flex min-h-screen h-auto">
@@ -26,13 +30,13 @@ const TeacherDashboard = () => {
                     <p className="text-sm font-bold">Welcome, {userId ? userId : "teacher"}</p>
                 </div>
                 <ul className="flex-grow px-4 py-1">
-                    <li className="py-3 hover:bg-gray-700 rounded-md px-4" onClick={() => setIndex(0)}>
+                    <li className="py-3 hover:bg-gray-700 rounded-md px-4" onClick={() => handlePage(0)}>
                         Profile
                     </li>
-                    <li className="py-3 hover:bg-gray-700 rounded-md px-4" onClick={() => setIndex(1)}>
+                    <li className="py-3 hover:bg-gray-700 rounded-md px-4" onClick={() => handlePage(1)}>
                         Create Quiz
                     </li>
-                    <li className="py-3 hover:bg-gray-700 rounded-md px-4" onClick={() => setIndex(2)}>
+                    <li className="py-3 hover:bg-gray-700 rounded-md px-4" onClick={() => handlePage(2)}>
                         Quiz
                     </li>
                 </ul>

@@ -28,6 +28,98 @@ class QuizController {
         }
     }
 
+    async getQuizzes(req, res) {
+        try {
+            const { id } = req.params; // Extract userId from request body
+            console.log(id);
+            if (!id) {
+                return res.status(400).json({ error: 'User ID is required' });
+            }
+    
+            // Aggregate quizzes for a specific creator
+            const groupedQuizzes = await Quiz.aggregate([
+                {
+                    '$match': {
+                        'creator': id // Filter by creator (userId)
+                    }
+                },
+                {
+                    '$group': {
+                        '_id': '$creator', 
+                        'quizzes': {
+                            '$push': {
+                                '_id': '$_id', 
+                                'title': '$title', 
+                                'createdAt': '$createdAt', 
+                                'updatedAt': '$updatedAt', 
+                                'questions': '$questions'
+                            }
+                        }
+                    }
+                },
+                {
+                    '$project': {
+                        'quizzes': {
+                            '$slice': [
+                                {
+                                    '$map': {
+                                        'input': '$quizzes',
+                                        'as': 'quiz',
+                                        'in': {
+                                            '_id': '$$quiz._id',
+                                            'title': '$$quiz.title',
+                                            'createdAt': '$$quiz.createdAt',
+                                            'updatedAt': '$$quiz.updatedAt',
+                                            'questions': '$$quiz.questions'
+                                        }
+                                    }
+                                },
+                                0, // Start from the beginning of the array
+                                { '$size': '$quizzes' } // Take all quizzes
+                            ]
+                        }
+                    }
+                },
+                {
+                    '$unwind': '$quizzes'
+                },
+                {
+                    '$sort': {
+                        'quizzes.createdAt': -1 // Sort quizzes by creation date, latest first
+                    }
+                },
+                {
+                    '$group': {
+                        '_id': '$_id',
+                        'quizzes': {
+                            '$push': '$quizzes'
+                        }
+                    }
+                }
+            ]);
+    
+            res.status(200).json(groupedQuizzes);
+        } catch (error) {
+            console.error('Error fetching grouped quizzes:', error);
+            res.status(500).json({ error: 'Server error' });
+        }
+    }
+    
+    
+    async getQuiz(req,res){
+        try{
+            const quizId = req.params.id;
+            const quiz = await Quiz.findById(quizId).populate('creator').exec();
+            if(!quiz){
+                return res.status(404).json({message:'Quiz not found'});
+                }
+                res.status(200).json({quiz});
+            }catch(error){
+                console.error('Error fetching quiz:', error);
+                res.status(500).json({message:'Server error'});
+            }
+    }
+
     async deleteQuiz(req, res) {
         try {
             const { id } = req.params;
