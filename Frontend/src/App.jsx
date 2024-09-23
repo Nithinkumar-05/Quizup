@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import { AuthProvider } from "./Routes/AuthContext";
 import Home from "./Home";
@@ -12,35 +12,50 @@ import TeacherRoutes from "./Routes/TeacherRoutes";
 import StudentDashboard from "./studentDashboard/StudentDashboard";
 import TeacherDashboard from "./teacherDashboard/TeacherDashboard";
 import AdminDashboard from "./adminDashboard/AdminDashboard";
-import { useMemo } from "react";
+import Results from "./studentDashboard/Results";
+import { useState, useEffect } from "react";
 
 function App() {
-  const token = localStorage.getItem("token");
-  return (
-    <>
-      <AuthProvider>
-        <Router>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />}></Route>
-            <Route path="/Login" element={<Login />}></Route>
-            <Route path="/SignUp" element={<SignUp />}></Route>
+  const [token, setToken] = useState(localStorage.getItem("token"));
 
-            {/* Protected Routes */}
-            <Route element={<AdminRoutes />}>
-              <Route path="/AdminDashboard" element={<AdminDashboard />} />
-            </Route>
-            <Route element={<StudentRoutes />}>
-              <Route path="/StudentDashboard" element={<StudentDashboard />} />
-            </Route>
-            <Route element={<TeacherRoutes />}>
-              <Route path="/TeacherDashboard" element={<TeacherDashboard />} />
-            </Route>
-          </Routes>
-          {!token && <Footer />} {/* Conditionally render Footer */}
-        </Router>
-      </AuthProvider>
-    </>
+  // Update token state when it changes in localStorage
+  useEffect(() => {
+    const handleTokenChange = () => {
+      setToken(localStorage.getItem("token"));
+    };
+
+    // Listen for storage changes (especially useful if the token is modified in another tab)
+    window.addEventListener("storage", handleTokenChange);
+
+    return () => {
+      window.removeEventListener("storage", handleTokenChange);
+    };
+  }, []);
+
+  return (
+    <AuthProvider>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/SignUp" element={<SignUp />} />
+
+          {/* Protected Routes */}
+          <Route element={<AdminRoutes />}>
+            <Route path="/AdminDashboard" element={<AdminDashboard />} />
+          </Route>
+          <Route element={<StudentRoutes />}>
+            <Route path="/StudentDashboard" element={<StudentDashboard />} />
+            <Route path="/StudentDashboard/Results" element={<Results />} />
+          </Route>
+          <Route element={<TeacherRoutes />}>
+            <Route path="/TeacherDashboard" element={<TeacherDashboard />} />
+          </Route>
+        </Routes>
+        {!token && <Footer />} {/* Conditionally render Footer */}
+      </Router>
+    </AuthProvider>
   );
 }
 

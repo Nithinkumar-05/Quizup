@@ -5,6 +5,7 @@ const app = express();
 const cors = require("cors");
 const loginRoute = require("./routes/login.route");
 const quizRoute = require("./routes/quiz.route");
+const resultRoute = require("./routes/result.route");
 // const quizRoute = require("./routes/quiz.route");
 // const userRoute = require("./routes/user.route");
 // const questionRoute = require("./routes/question.route");
@@ -15,6 +16,7 @@ app.use(cors());
 
 app.use("/quiz", loginRoute);
 app.use("/host",quizRoute);
+app.use("/contest",resultRoute);
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
