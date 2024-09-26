@@ -3,8 +3,9 @@ import { useAuth } from "../Routes/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Profile from "./Profile";
 import Quiz from "./Quiz";
-import CreateQuiz from "./createQuiz";
+import CreateQuiz from "./CreateQuiz";
 import Preview from "./Preview";
+
 const TeacherDashboard = () => {
     const [userId, setUserId] = useState(localStorage.getItem("userId"));
     const [index, setIndex] = useState(localStorage.getItem("index"));

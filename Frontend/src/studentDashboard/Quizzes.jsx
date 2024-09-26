@@ -1,6 +1,7 @@
 import { FaHashtag } from "react-icons/fa";
 import { HiArrowRight } from "react-icons/hi";
-import { useState, useCallback } from "react";
+import { FiClock } from "react-icons/fi";
+import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; 
 import axios from "axios";
 
@@ -10,14 +11,17 @@ const Quizzes = () => {
   const [error, setError] = useState("");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState({});
+  const [overallTimeLeft, setOverallTimeLeft] = useState(0);
   const navigate = useNavigate(); 
 
   // Fetch quiz data by quiz code
   const handleClick = async () => {
     try {
       const response = await axios.get(`http://localhost:1000/host/getQuiz/${quizCode}`);
-      setQuizData(response.data.quiz);
+      const quiz = response.data.quiz;
+      setQuizData(quiz);
       setUserAnswers({});
+      setOverallTimeLeft(quiz.questions.length * 60); // Set overall timer
       setError("");
     } catch (err) {
       setError("Quiz not found. Please try again.");
@@ -33,12 +37,20 @@ const Quizzes = () => {
     }));
   };
 
+  // Format time to mm:ss
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+
   // Render the current question and its options
   const renderQuestion = () => {
     const currentQuestion = quizData.questions[currentQuestionIndex];
+
     return (
-      <div className="p-4 border border-gray-300 rounded-lg bg-gray-50 shadow-md mb-6">
-        <h3 className="text-lg font-semibold mb-2">
+      <div className="p-4 border border-gray-300 rounded-lg bg-gray-50 shadow-md mb-6 relative">
+        <h3 className="text-lg font-semibold mb-2 pr-16">
           {currentQuestionIndex + 1}. {currentQuestion.questionText}
         </h3>
         <div className="mt-2 grid grid-cols-2 gap-4">
@@ -51,6 +63,7 @@ const Quizzes = () => {
                   ? "bg-blue-500 text-white"
                   : "bg-white text-gray-800 hover:bg-gray-200"
               }`}
+              disabled={overallTimeLeft === 0}
             >
               {option}
             </button>
@@ -63,16 +76,17 @@ const Quizzes = () => {
   // Render question navigation
   const renderQuestionNavigation = () => {
     return (
-      <div className="flex items-center space-x-4 mb-6">
+      <div className="flex items-center space-x-4 mb-6 overflow-x-auto pb-2" style={{ maxWidth: '100%', scrollbarWidth: 'thin' }}>
         {quizData.questions.map((question, index) => (
-          <div key={index} className="flex items-center">
+          <div key={index} className="flex items-center flex-shrink-0">
             <button
               className={`w-10 h-10 rounded-full text-white ${
-                userAnswers[question._id] === undefined // No answer selected
-                  ? "bg-red-500" // Glow red if no answer chosen
-                  : "bg-green-500" // Glow green if any option is chosen
-              } ${currentQuestionIndex === index && userAnswers[question._id] === undefined ? "animate-pulse" : ""}`} // Pulse effect only if no answer is chosen
+                userAnswers[question._id] === undefined
+                  ? "bg-red-500"
+                  : "bg-green-500"
+              } ${currentQuestionIndex === index && userAnswers[question._id] === undefined ? "animate-pulse" : ""}`}
               onClick={() => setCurrentQuestionIndex(index)}
+              disabled={overallTimeLeft === 0}
             >
               {index + 1}
             </button>
@@ -125,6 +139,24 @@ const Quizzes = () => {
     }
   }, [navigate, quizData, userAnswers]);
 
+  // Overall timer effect
+  useEffect(() => {
+    if (!quizData || overallTimeLeft === 0) return;
+
+    const timer = setInterval(() => {
+      setOverallTimeLeft(prevTime => {
+        if (prevTime <= 1) {
+          clearInterval(timer);
+          handleSubmit();
+          return 0;
+        }
+        return prevTime - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [quizData, overallTimeLeft, handleSubmit]);
+
   return (
     <div className="p-6">
       {!quizData ? (
@@ -155,15 +187,20 @@ const Quizzes = () => {
         </>
       ) : (
         <>
-          <h1 className="text-2xl font-bold mb-4">{quizData.title}</h1>
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-2xl font-bold">{quizData.title}</h1>
+            <div className="flex items-center text-lg font-semibold">
+              <FiClock className="mr-2" />
+              <span className={overallTimeLeft <= 60 ? "text-red-500" : ""}>
+                {formatTime(overallTimeLeft)}
+              </span>
+            </div>
+          </div>
 
-          {/* Render the question navigation */}
           {renderQuestionNavigation()}
 
-          {/* Render the current question */}
           {renderQuestion()}
 
-          {/* Submit Button */}
           {currentQuestionIndex === quizData.questions.length - 1 ? (
             <button
               className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700"
@@ -175,6 +212,7 @@ const Quizzes = () => {
             <button
               className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700"
               onClick={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}
+              disabled={overallTimeLeft === 0}
             >
               Next
             </button>

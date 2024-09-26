@@ -41,22 +41,21 @@ const getResultsByQuiz = async (req, res) => {
     // Find all results for the given quizId
     const results = await Results.find({ quizId })
       .populate("userId", "fullName emailId") // Populate user information
-      .populate("creator", "fullName emailId") // Populate quiz creator information
+      .populate("creator", "fullName emailId")
+      .sort({createdAt:-1}) // Populate quiz creator information
       .exec();
 
-    if (!results || results.length === 0) {
-      return res.status(404).json({ message: "No results found for this quiz." });
-    }
-
+    // Even if no results are found, return an empty array instead of a 404
     return res.status(200).json({
       message: "Results retrieved successfully",
-      results,
+      results: results.length > 0 ? results : [], // Return empty array if no results
     });
   } catch (error) {
     console.error("Error retrieving results:", error); // Log the error for debugging
     return res.status(500).json({ message: "Error retrieving results", error: error.message });
   }
 };
+
 
 // Controller to get results for a specific user
 const getResultsByUser = async (req, res) => {

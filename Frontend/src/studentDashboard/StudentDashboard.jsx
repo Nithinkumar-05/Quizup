@@ -32,7 +32,7 @@ const StudentDashboard = () => {
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <div className="w-1/6 bg-cyan-800 text-white flex flex-col flex-grow-0">
+      <div className="w-1/6 bg-cyan-800 text-white flex flex-col flex-grow-0 cursor-pointer">
         <div className="text-center py-4 border-b border-gray-700">
           <p className="text-sm font-bold">Welcome, {userId ? userId : "student"}</p>
         </div>
