@@ -47,55 +47,46 @@ const OverallResults = () => {
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6">Complete Results</h1>
 
-      {currentResults.length > 0 ? (
-        <>
-          <table className="min-w-full bg-white border border-gray-300 ">
-            <thead>
-              <tr>
-                <th className="border px-4 py-2">Creator</th>
-                <th className="border px-4 py-2">Quiz Title</th>
-                <th className="border px-4 py-2">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentResults.map((result) => (
-                <tr
-                  key={result._id}
-                  className="hover:bg-slate-50 cursor-pointer"
-                  onClick={() => handleRowClick(result)}
-                >
-                  <td className="border px-4 py-2">{result.creator}</td>
-                  <td className="border px-4 py-2">{result.quizTitle}</td>
-                  <td className="border px-4 py-2">
-                    {new Date(result.createdAt).toLocaleDateString()}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {currentResults.length > 0 ? (
+          currentResults.map((result) => (
+            <div
+              key={result._id}
+              className="bg-white border rounded-lg shadow hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+              onClick={() => handleRowClick(result)}
+            >
+              <div className="p-4">
+                <h2 className="text-xl font-semibold">{result.quizTitle}</h2>
+                <p className="text-gray-600">Creator: {result.creator}</p>
+                <p className="text-gray-500">
+                  Date: {new Date(result.createdAt).toLocaleDateString()}
+                </p>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p>No results found.</p>
+        )}
+      </div>
 
-          {/* Pagination Controls */}
-          <div className="flex justify-between mt-7">
-            <button
-              className={`px-4 py-2 ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'bg-blue-600 text-white'} rounded`}
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-            <span className="self-center">Page {currentPage} of {totalPages}</span>
-            <button
-              className={`px-4 py-2 ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : 'bg-blue-600 text-white'} rounded`}
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
-          </div>
-        </>
-      ) : (
-        <p>No results found.</p>
-      )}
+      {/* Pagination Controls */}
+      <div className="flex justify-between mt-7">
+        <button
+          className={`px-4 py-2 ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'bg-blue-600 text-white'} rounded`}
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span className="self-center">Page {currentPage} of {totalPages}</span>
+        <button
+          className={`px-4 py-2 ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : 'bg-blue-600 text-white'} rounded`}
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
 
       {/* Modal to show Gauge Chart */}
       <Modal open={open} onClose={handleClose}>
