@@ -36,7 +36,6 @@ const Quiz = () => {
 
   return (
     <>
-      <h1>Quiz</h1>
       <QuizList quizzes={quizzes} />
     </>
   );
