@@ -3,7 +3,7 @@ import { useAuth } from "../Routes/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Profile from "./Profile";
 import Quiz from "./Quiz";
-import CreateQuiz from "./CreateQuiz";
+import CreateQuiz from "./createQuiz";
 import Preview from "./Preview";
 
 const TeacherDashboard = () => {
