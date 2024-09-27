@@ -115,6 +115,7 @@ const QuizList = ({ quizzes }) => {
       ) : showQuestions ? (
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-2xl font-bold mb-4 text-gray-800">{selectedQuiz.title}</h2>
+          <h2 className="text-gray-600 mb-4">Quiz Id:{selectedQuiz._id}</h2>
           <p className="text-gray-600 mb-4">
             Created on: {new Date(selectedQuiz.createdAt).toLocaleDateString()}
           </p>
