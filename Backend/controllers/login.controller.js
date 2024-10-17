@@ -1,5 +1,5 @@
 const userModel = require("../model/user.model");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const secretKey = process.env.SECRET_KEY || "mysecretkey";
@@ -8,7 +8,7 @@ class LoginController {
   async login(req, res) {
     console.log(req.body);
 
-    const {userId,password} = req.body;
+    const { userId, password } = req.body;
     try {
       const user = await userModel.findOne({ userId: userId });
       if (!user) {
@@ -21,7 +21,9 @@ class LoginController {
       const token = jwt.sign({ emailId: user.emailId }, secretKey, {
         expiresIn: "24h",
       });
-      return res.status(200).json({ role:user.role,token: token,user:user });
+      return res
+        .status(200)
+        .json({ role: user.role, token: token, user: user });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
