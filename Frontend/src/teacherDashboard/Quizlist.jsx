@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
-import { FaChevronLeft, FaChevronRight, FaEye, FaUsers, FaArrowLeft } from "react-icons/fa";
+import {
+  FaChevronLeft,
+  FaChevronRight,
+  FaEye,
+  FaUsers,
+  FaArrowLeft,
+} from "react-icons/fa";
 import axios from "axios";
+const baseurl = import.meta.env.REACT_APP_BASE_URL || "http://localhost:1000";
 
 const QuizList = ({ quizzes }) => {
   const [selectedQuiz, setSelectedQuiz] = useState(null);
@@ -29,7 +36,7 @@ const QuizList = ({ quizzes }) => {
 
   const handleFetchParticipants = async (quizId) => {
     try {
-      const response = await axios.get(`http://localhost:1000/contest/results/${quizId}`);
+      const response = await axios.get(`${baseurl}/contest/results/${quizId}`);
       setParticipants(response.data.results);
       setShowParticipants(true);
       setShowQuestions(false);
@@ -57,32 +64,47 @@ const QuizList = ({ quizzes }) => {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created On</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Title
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Created On
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {displayedQuizzes.map((quiz) => (
-                      <tr key={quiz._id} className="hover:bg-gray-50 transition-colors duration-200">
+                      <tr
+                        key={quiz._id}
+                        className="hover:bg-gray-50 transition-colors duration-200"
+                      >
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">{quiz.title}</div>
+                          <div className="text-sm font-medium text-gray-900">
+                            {quiz.title}
+                          </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-500">{new Date(quiz.createdAt).toLocaleDateString()}</div>
+                          <div className="text-sm text-gray-500">
+                            {new Date(quiz.createdAt).toLocaleDateString()}
+                          </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <button
                             onClick={() => handleQuizClick(quiz)}
                             className="text-cyan-800 hover:text-cyan-600 mr-4"
                           >
-                            <FaEye className="inline-block mr-1" /> View Questions
+                            <FaEye className="inline-block mr-1" /> View
+                            Questions
                           </button>
                           <button
                             onClick={() => handleFetchParticipants(quiz._id)}
                             className="text-green-600 hover:text-green-400"
                           >
-                            <FaUsers className="inline-block mr-1" /> View Participants
+                            <FaUsers className="inline-block mr-1" /> View
+                            Participants
                           </button>
                         </td>
                       </tr>
@@ -114,21 +136,31 @@ const QuizList = ({ quizzes }) => {
         </>
       ) : showQuestions ? (
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-4 text-gray-800">{selectedQuiz.title}</h2>
+          <h2 className="text-2xl font-bold mb-4 text-gray-800">
+            {selectedQuiz.title}
+          </h2>
           <h2 className="text-gray-600 mb-4">Quiz Id:{selectedQuiz._id}</h2>
           <p className="text-gray-600 mb-4">
             Created on: {new Date(selectedQuiz.createdAt).toLocaleDateString()}
           </p>
-          <h3 className="text-xl font-semibold mb-4 text-gray-700">Questions:</h3>
+          <h3 className="text-xl font-semibold mb-4 text-gray-700">
+            Questions:
+          </h3>
           <div className="space-y-6">
             {selectedQuiz.questions.map((q, index) => (
               <div key={index} className="bg-gray-50 p-4 rounded-lg">
-                <p className="font-medium text-gray-800 mb-2">Q{index + 1}: {q.questionText}</p>
+                <p className="font-medium text-gray-800 mb-2">
+                  Q{index + 1}: {q.questionText}
+                </p>
                 <ul className="list-disc list-inside space-y-1">
                   {q.options.map((option, idx) => (
                     <li
                       key={idx}
-                      className={`text-gray-600 ${idx === q.correctOptionIndex ? "font-semibold text-green-600" : ""}`}
+                      className={`text-gray-600 ${
+                        idx === q.correctOptionIndex
+                          ? "font-semibold text-green-600"
+                          : ""
+                      }`}
                     >
                       {option}
                     </li>
@@ -146,23 +178,40 @@ const QuizList = ({ quizzes }) => {
         </div>
       ) : showParticipants ? (
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">Participants</h2>
+          <h2 className="text-2xl font-bold mb-6 text-gray-800">
+            Participants
+          </h2>
           {participants.length > 0 ? (
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User ID</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Questions</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      User ID
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Score
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Total Questions
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {participants.map((participant) => (
-                    <tr key={participant._id} className="hover:bg-gray-50 transition-colors duration-200">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{participant.userId}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{participant.score}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{participant.totalQuestions}</td>
+                    <tr
+                      key={participant._id}
+                      className="hover:bg-gray-50 transition-colors duration-200"
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {participant.userId}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {participant.score}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {participant.totalQuestions}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
