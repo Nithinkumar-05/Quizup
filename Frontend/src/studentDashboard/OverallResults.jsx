@@ -4,7 +4,7 @@ import { Modal } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { Gauge, gaugeClasses } from "@mui/x-charts/Gauge";
 
-const baseurl = import.meta.env.REACT_APP_BASE_URL || "http://localhost:1000";
+const baseurl = import.meta.env.VITE_BASE_URL || "http://localhost:1000";
 
 const OverallResults = () => {
   const [results, setResults] = useState([]);

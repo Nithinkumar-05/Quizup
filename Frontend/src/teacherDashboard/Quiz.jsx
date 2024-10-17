@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import QuizList from "./Quizlist";
-const baseurl = import.meta.env.REACT_APP_BASE_URL || "http://localhost:1000";
+const baseurl = import.meta.env.VITE_BASE_URL || "http://localhost:1000";
 
 const Quiz = () => {
   const [quizzes, setQuizzes] = useState([]);

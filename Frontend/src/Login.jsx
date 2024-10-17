@@ -6,7 +6,7 @@ const LoginPage = () => {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const baseurl = import.meta.env.REACT_APP_BASE_URL || "http://localhost:1000";
+  const baseurl = import.meta.env.VITE_BASE_URL || "http://localhost:1000";
   const auth = useAuth();
   const navigate = useNavigate();
   const handleLogin = async (e) => {
