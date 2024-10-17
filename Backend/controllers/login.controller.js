@@ -6,11 +6,9 @@ const secretKey = process.env.SECRET_KEY || "mysecretkey";
 
 class LoginController {
   async login(req, res) {
-    console.log(req.body);
-
     const { userId, password } = req.body;
     try {
-      const user = await userModel.findOne({ userId: userId });
+      const user = await userModel.findOne({ userId });
       if (!user) {
         return res.status(400).json({ message: "Invalid User ID" });
       }
@@ -21,17 +19,16 @@ class LoginController {
       const token = jwt.sign({ emailId: user.emailId }, secretKey, {
         expiresIn: "24h",
       });
-      return res
-        .status(200)
-        .json({ role: user.role, token: token, user: user });
+      return res.status(200).json({ role: user.role, token, user });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
   }
+
   async register(req, res) {
     const { fullName, phoneNumber, emailId, password, role, userId } = req.body;
     try {
-      const user = await userModel.findOne({ userId: userId });
+      const user = await userModel.findOne({ userId });
       if (user) {
         return res.status(400).json({ message: "UserID already exists" });
       }

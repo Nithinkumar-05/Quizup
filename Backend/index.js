@@ -1,32 +1,28 @@
 const express = require("express");
 const connection = require("./connection/database");
-const port = process.env.PORT || 1000;
-const app = express();
 const cors = require("cors");
+const bodyParser = require("body-parser");
+
 const loginRoute = require("./routes/login.route");
 const quizRoute = require("./routes/quiz.route");
 const resultRoute = require("./routes/result.route");
-// const userRoute = require("./routes/user.route");
-// const questionRoute = require("./routes/question.route");
-// const resultRoute = require("./routes/result.route");
+
+const app = express();
+const port = process.env.PORT || 1000;
 
 // Middleware
-app.use(express.json());
-app.use(
-  cors({
-    origin: "https://quized.vercel.app", // Only allow requests from your frontend
-  })
-);
+app.use(bodyParser.json());
+app.use(cors());
 
 // Routes
-app.use("/quiz", loginRoute);
+app.use("/quiz", loginRoute); // Make sure the routes are properly required
 app.use("/host", quizRoute);
 app.use("/contest", resultRoute);
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-// Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
