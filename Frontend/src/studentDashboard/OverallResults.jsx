@@ -4,6 +4,8 @@ import { Modal } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { Gauge, gaugeClasses } from "@mui/x-charts/Gauge";
 
+const baseurl = import.meta.env.VITE_BASE_URL || "http://localhost:1000";
+
 const OverallResults = () => {
   const [results, setResults] = useState([]);
   const [selectedResult, setSelectedResult] = useState(null);
@@ -16,7 +18,7 @@ const OverallResults = () => {
     const fetchResults = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:1000/contest/results/user/${userId}`
+          `${baseurl}/contest/results/user/${userId}`
         );
         setResults(response.data.results);
       } catch (error) {
@@ -72,16 +74,28 @@ const OverallResults = () => {
       {/* Pagination Controls */}
       <div className="flex justify-between mt-7">
         <button
-          className={`px-4 py-2 ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'bg-blue-600 text-white'} rounded`}
+          className={`px-4 py-2 ${
+            currentPage === 1
+              ? "opacity-50 cursor-not-allowed"
+              : "bg-blue-600 text-white"
+          } rounded`}
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
         >
           Previous
         </button>
-        <span className="self-center">Page {currentPage} of {totalPages}</span>
+        <span className="self-center">
+          Page {currentPage} of {totalPages}
+        </span>
         <button
-          className={`px-4 py-2 ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : 'bg-blue-600 text-white'} rounded`}
-          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          className={`px-4 py-2 ${
+            currentPage === totalPages
+              ? "opacity-50 cursor-not-allowed"
+              : "bg-blue-600 text-white"
+          } rounded`}
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
           disabled={currentPage === totalPages}
         >
           Next

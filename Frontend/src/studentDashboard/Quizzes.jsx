@@ -2,8 +2,9 @@ import { FaHashtag } from "react-icons/fa";
 import { HiArrowRight } from "react-icons/hi";
 import { FiClock } from "react-icons/fi";
 import { useState, useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+const baseurl = import.meta.env.VITE_BASE_URL || "http://localhost:1000";
 
 const Quizzes = () => {
   const [quizCode, setQuizCode] = useState("");
@@ -12,12 +13,12 @@ const Quizzes = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState({});
   const [overallTimeLeft, setOverallTimeLeft] = useState(0);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   // Fetch quiz data by quiz code
   const handleClick = async () => {
     try {
-      const response = await axios.get(`http://localhost:1000/host/getQuiz/${quizCode}`);
+      const response = await axios.get(`${baseurl}/host/getQuiz/${quizCode}`);
       const quiz = response.data.quiz;
       setQuizData(quiz);
       setUserAnswers({});
@@ -41,7 +42,9 @@ const Quizzes = () => {
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    return `${minutes.toString().padStart(2, "0")}:${remainingSeconds
+      .toString()
+      .padStart(2, "0")}`;
   };
 
   // Render the current question and its options
@@ -76,7 +79,10 @@ const Quizzes = () => {
   // Render question navigation
   const renderQuestionNavigation = () => {
     return (
-      <div className="flex items-center space-x-4 mb-6 overflow-x-auto pb-2" style={{ maxWidth: '100%', scrollbarWidth: 'thin' }}>
+      <div
+        className="flex items-center space-x-4 mb-6 overflow-x-auto pb-2"
+        style={{ maxWidth: "100%", scrollbarWidth: "thin" }}
+      >
         {quizData.questions.map((question, index) => (
           <div key={index} className="flex items-center flex-shrink-0">
             <button
@@ -84,7 +90,12 @@ const Quizzes = () => {
                 userAnswers[question._id] === undefined
                   ? "bg-red-500"
                   : "bg-green-500"
-              } ${currentQuestionIndex === index && userAnswers[question._id] === undefined ? "animate-pulse" : ""}`}
+              } ${
+                currentQuestionIndex === index &&
+                userAnswers[question._id] === undefined
+                  ? "animate-pulse"
+                  : ""
+              }`}
               onClick={() => setCurrentQuestionIndex(index)}
               disabled={overallTimeLeft === 0}
             >
@@ -100,7 +111,7 @@ const Quizzes = () => {
       </div>
     );
   };
-  
+
   // Submit the quiz and send results to backend
   const handleSubmit = useCallback(async () => {
     const userId = localStorage.getItem("userId");
@@ -126,14 +137,16 @@ const Quizzes = () => {
     };
 
     try {
-      await axios.post("http://localhost:1000/contest/results", data);
+      await axios.post(`${baseurl}/contest/results`, data);
       console.log("Results posted successfully");
 
       // Update localStorage index to display results
       localStorage.setItem("index", "3");
 
       // Redirect to Results page
-      navigate("/StudentDashboard/Results", { state: { quizData, userAnswers } });
+      navigate("/StudentDashboard/Results", {
+        state: { quizData, userAnswers },
+      });
     } catch (error) {
       console.error("Error posting results:", error);
     }
@@ -144,7 +157,7 @@ const Quizzes = () => {
     if (!quizData || overallTimeLeft === 0) return;
 
     const timer = setInterval(() => {
-      setOverallTimeLeft(prevTime => {
+      setOverallTimeLeft((prevTime) => {
         if (prevTime <= 1) {
           clearInterval(timer);
           handleSubmit();
@@ -163,7 +176,9 @@ const Quizzes = () => {
         <>
           <h1 className="text-3xl font-bold mb-6">Quizzes</h1>
           <div className="flex flex-col items-center justify-center mt-10">
-            <h2 className="text-xl font-semibold mb-4">Want to join a live quiz?</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              Want to join a live quiz?
+            </h2>
             <div className="flex items-center w-full max-w-md bg-white border border-gray-300 rounded-lg shadow-md">
               <span className="flex items-center justify-center px-4 text-green-600">
                 <FaHashtag />

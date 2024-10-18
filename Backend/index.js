@@ -1,22 +1,24 @@
 const express = require("express");
 const connection = require("./connection/database");
-const port = 1000 || process.env.PORT;
-const app = express();
 const cors = require("cors");
+const bodyParser = require("body-parser");
+
 const loginRoute = require("./routes/login.route");
 const quizRoute = require("./routes/quiz.route");
 const resultRoute = require("./routes/result.route");
-// const quizRoute = require("./routes/quiz.route");
-// const userRoute = require("./routes/user.route");
-// const questionRoute = require("./routes/question.route");
-// const resultRoute = require("./routes/result.route");
-const bodyParser = require("body-parser");
+
+const app = express();
+const port = process.env.PORT || 1000;
+
+// Middleware
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use("/quiz", loginRoute);
-app.use("/host",quizRoute);
-app.use("/contest",resultRoute);
+// Routes
+app.use("/quiz", loginRoute); // Make sure the routes are properly required
+app.use("/host", quizRoute);
+app.use("/contest", resultRoute);
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
