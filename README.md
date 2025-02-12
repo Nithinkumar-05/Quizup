@@ -1,6 +1,8 @@
 # EdQuiz
 
 EdQuiz is a web-based educational quiz application designed to provide an interactive learning experience. Built using **ReactJS, Tailwind CSS, NodeJS, and Express**, it offers users a seamless and engaging quiz-taking experience.
+## View Project in Vercel : [EdQuiz](https://quized.vercel.app/)
+![image](https://github.com/user-attachments/assets/19270d01-eedf-415e-8a71-0eb892f1fda1)
 
 ## Features
 - **User Authentication**: Secure login and signup system.
@@ -9,6 +11,8 @@ EdQuiz is a web-based educational quiz application designed to provide an intera
 - **Leaderboard**: Tracks top-performing users.
 - **Responsive Design**: Optimized for various screen sizes using Tailwind CSS.
 - **Performance Tracking**: Users can review their past quiz performance.
+- ![image](https://github.com/user-attachments/assets/b36b224e-8720-443c-99af-70f9f8b4b18c)
+
 
 ## Tech Stack
 - **Frontend**: ReactJS, Tailwind CSS
