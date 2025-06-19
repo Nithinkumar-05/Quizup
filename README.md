@@ -61,10 +61,4 @@ Contributions are welcome! To contribute:
 - Push to the branch (`git push origin feature-name`).
 - Open a pull request.
 
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Contact
-For any inquiries or feedback, feel free to reach out:
-- **GitHub**: [AloneBoy18](https://github.com/AloneBoy18)
-- **Email**: nagakarthikeyan18@gmail.com
